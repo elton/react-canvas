@@ -16,7 +16,7 @@ function resizeCanvasToDisplaySize(canvas) {
   return false;
 }
 
-const useCanvas = (draw) => {
+const useAnimationCanvas = (draw) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -41,4 +41,21 @@ const useCanvas = (draw) => {
   return canvasRef;
 };
 
-export default useCanvas;
+export const useCanvas = (draw) => {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
+
+    const render = () => {
+      resizeCanvasToDisplaySize(canvas);
+      draw(context);
+    };
+    render();
+  }, [draw]);
+
+  return canvasRef;
+};
+
+export default useAnimationCanvas;
