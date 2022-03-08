@@ -129,8 +129,8 @@ function App() {
   };
 
   return (
-    <div className='p-4 space-y-4'>
-      <h1 className='text-3xl text-teal-900 font-semibold text-center underline '>
+    <div className='space-y-4 p-4'>
+      <h1 className='text-center text-3xl font-semibold text-teal-900 underline '>
         Canvas Demo
       </h1>
       <Canvas draw={draw1} className={canvasStyle} />
