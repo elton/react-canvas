@@ -114,15 +114,18 @@ function App() {
   };
 
   const draw3 = (ctx) => {
-    const rectangle = new Path2D();
+    const rectangle = new Path2D(); //Path2D 用来缓存或记录绘画命令,提升性能
     rectangle.rect(10, 10, 50, 50);
 
     const circle = new Path2D();
     circle.moveTo(125, 35);
     circle.arc(100, 35, 25, 0, 2 * Math.PI);
 
+    const svg = new Path2D('M150 10 h 80 v 80 h -80 Z'); // 这条路径将先移动到点 (M10 10) 然后再水平移动80个单位(h 80)，然后下移80个单位 (v 80)，接着左移80个单位 (h -80)，再回到起点处 (z)。
+
     ctx.stroke(rectangle);
     ctx.fill(circle);
+    ctx.stroke(svg);
   };
 
   return (
