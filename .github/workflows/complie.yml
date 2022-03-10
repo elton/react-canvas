@@ -1,0 +1,57 @@
+# This is a basic workflow to help you get started with Actions
+
+name: 'Compile the project'
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [main]
+    tags: [release-v*]
+  pull_request:
+    branches: [main]
+
+  # Allows you to run this workflow manually from the Actions tab
+  # workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a set of commands using the runners shell
+      # build the docker image and push to Alibaba's Docker registry.
+      - name: Push Docker
+        run: |
+          docker login --username=${{ secrets.USERNAME }} --password ${{ secrets.PASSWORD }} ccr.ccs.tencentyun.com
+          docker build . -t ${{ secrets.REGISTRY }}:$GITHUB_RUN_NUMBER
+          docker push ${{ secrets.REGISTRY }}:$GITHUB_RUN_NUMBER
+          docker tag $(docker images ${{ secrets.REGISTRY }}:$GITHUB_RUN_NUMBER -q) ${{ secrets.REGISTRY }}:latest
+          docker push ${{ secrets.REGISTRY }}:latest
+
+  pull-docker:
+    needs: [build]
+    name: Pull Docker and Run the Docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to the specified docker server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            docker stop $(docker ps --filter ancestor=${{ secrets.REGISTRY }} -q)
+            docker rm -f $(docker ps -a --filter ancestor=${{ secrets.REGISTRY }}:latest -q)
+            docker rmi -f $(docker images  ${{ secrets.REGISTRY }}:latest -q)
+            docker login --username=${{ secrets.USERNAME }} --password ${{ secrets.PASSWORD }} ccr.ccs.tencentyun.com
+            docker pull ${{ secrets.REGISTRY }}:latest
+            docker run -d -p 3000:3000 ${{ secrets.REGISTRY }}:latest

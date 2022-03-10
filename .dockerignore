@@ -1,0 +1,16 @@
+.git/
+.gitignore
+**/.gitkeep
+**/.DS_Store
+
+docker-compose.yml
+
+
+*.log
+
+Dockerfile
+.dockerignore
+node_modules
+npm-debug.log
+README.md
+.vscode/
