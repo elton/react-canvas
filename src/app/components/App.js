@@ -128,6 +128,49 @@ function App() {
     ctx.stroke(svg);
   };
 
+  const draw4 = (ctx) => {
+    // ctx.fillStyle = 'orange';
+    // ctx.fillStyle = '#FFA500';
+    // ctx.fillStyle = 'rgb(255,165,0)';
+    // ctx.fillStyle = 'rgba(255,165,0,1)';
+
+    for (let i = 0; i < 6; i++) {
+      for (let j = 0; j < 6; j++) {
+        ctx.fillStyle =
+          'rgb(' +
+          Math.floor(255 - 42.5 * i) +
+          ',' +
+          Math.floor(255 - 42.5 * j) +
+          ',0)';
+        ctx.fillRect(j * 25, i * 25, 25, 25);
+      }
+    }
+
+    for (let i = 0; i < 6; i++) {
+      for (let j = 0; j < 6; j++) {
+        ctx.strokeStyle =
+          'rgb(0,' +
+          Math.floor(255 - 42.5 * i) +
+          ',' +
+          Math.floor(255 - 42.5 * j) +
+          ')';
+        ctx.beginPath();
+        ctx.arc(180.5 + j * 25, 15 + i * 25, 10, 0, Math.PI * 2, true);
+        ctx.stroke();
+      }
+    }
+  };
+
+  const draw5 = (ctx) => {
+    let img = new Image();
+    img.src = 'https://img.pwr.ink/nft/endless-clouds.svg';
+    img.onload = () => {
+      let ptrn = ctx.createPattern(img, 'repeat');
+      ctx.fillStyle = ptrn;
+      ctx.fillRect(0, 0, 300, 150);
+    };
+  };
+
   return (
     <div className='space-y-4 p-4'>
       <h1 className='text-center text-3xl font-semibold text-teal-900 underline '>
@@ -136,6 +179,8 @@ function App() {
       <Canvas draw={draw1} className={canvasStyle} />
       <Canvas draw={draw2} className={canvasStyle} />
       <Canvas draw={draw3} className={canvasStyle} />
+      <Canvas draw={draw4} className={canvasStyle} />
+      <Canvas draw={draw5} className={canvasStyle} />
       <AnimationCanvas draw={draw} className={canvasStyle} />
     </div>
   );
