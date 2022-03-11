@@ -182,6 +182,49 @@ function App() {
     ctx.fillText('Sample String', 5, 30); // fillText(text, x, y [, maxWidth]),g在指定的(x,y)位置填充指定的文本，绘制的最大宽度是可选的.
   };
 
+  const draw7 = (ctx) => {
+    let img = new Image();
+    img.onload = function () {
+      ctx.drawImage(img, 0, 0);
+      ctx.beginPath();
+      ctx.moveTo(30, 96);
+      ctx.lineTo(70, 66);
+      ctx.lineTo(103, 76);
+      ctx.lineTo(170, 15);
+      ctx.stroke();
+    };
+    img.src = 'https://mdn.mozillademos.org/files/5395/backdrop.png';
+  };
+
+  const draw8 = (ctx) => {
+    ctx.fillRect(0, 0, 150, 150); // 使用默认设置绘制一个矩形
+    ctx.save(); // 保存默认状态
+
+    ctx.fillStyle = '#09F'; // 在原有配置基础上对颜色做改变
+    ctx.fillRect(15, 15, 120, 120); // 使用新的设置绘制一个矩形
+
+    ctx.save(); // 保存当前状态
+    ctx.fillStyle = '#FFF'; // 再次改变颜色配置
+    ctx.globalAlpha = 0.5;
+    ctx.fillRect(30, 30, 90, 90); // 使用新的配置绘制一个矩形
+
+    ctx.restore(); // 重新加载之前的颜色状态
+    ctx.fillRect(45, 45, 60, 60); // 使用上一次的配置绘制一个矩形
+
+    ctx.restore(); // 加载默认颜色配置
+    ctx.fillRect(60, 60, 30, 30); // 使用加载的配置绘制一个矩形
+
+    for (var i = 0; i < 3; i++) {
+      for (var j = 0; j < 3; j++) {
+        ctx.save();
+        ctx.fillStyle = 'rgb(' + 51 * i + ', ' + (255 - 51 * i) + ', 255)';
+        ctx.translate(180 + j * 50, 10 + i * 50); // translate(x, y),x 是左右偏移量，y 是上下偏移量
+        ctx.fillRect(0, 0, 25, 25);
+        ctx.restore();
+      }
+    }
+  };
+
   return (
     <div className='space-y-4 p-4'>
       <h1 className='text-center text-3xl font-semibold text-teal-900 underline '>
@@ -193,6 +236,8 @@ function App() {
       <Canvas draw={draw4} className={canvasStyle} />
       <Canvas draw={draw5} className={canvasStyle} />
       <Canvas draw={draw6} className={canvasStyle} />
+      <Canvas draw={draw7} className={canvasStyle} />
+      <Canvas draw={draw8} className={canvasStyle} />
       <AnimationCanvas draw={draw} className={canvasStyle} />
     </div>
   );
