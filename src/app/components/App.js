@@ -171,6 +171,17 @@ function App() {
     };
   };
 
+  const draw6 = (ctx) => {
+    ctx.shadowOffsetX = 2;
+    ctx.shadowOffsetY = 2;
+    ctx.shadowBlur = 2;
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+
+    ctx.font = '20px Times New Roman';
+    ctx.fillStyle = 'Black';
+    ctx.fillText('Sample String', 5, 30); // fillText(text, x, y [, maxWidth]),g在指定的(x,y)位置填充指定的文本，绘制的最大宽度是可选的.
+  };
+
   return (
     <div className='space-y-4 p-4'>
       <h1 className='text-center text-3xl font-semibold text-teal-900 underline '>
@@ -181,6 +192,7 @@ function App() {
       <Canvas draw={draw3} className={canvasStyle} />
       <Canvas draw={draw4} className={canvasStyle} />
       <Canvas draw={draw5} className={canvasStyle} />
+      <Canvas draw={draw6} className={canvasStyle} />
       <AnimationCanvas draw={draw} className={canvasStyle} />
     </div>
   );
